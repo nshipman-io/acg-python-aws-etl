@@ -1,17 +1,12 @@
 resource "aws_dynamodb_table" "covid-db" {
-  hash_key = "ID"
-  range_key = "Date"
+  hash_key = "date"
   name = "CovidData"
   billing_mode = "PAY_PER_REQUEST"
 
   attribute {
-    name = "ID"
+    name = "date"
     type = "S"
   }
 
-  attribute {
-    name = "Date"
-    type = "S"
-  }
 
 }

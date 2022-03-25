@@ -1,4 +1,5 @@
 import transform
+import dynamo
 
 def main():
     nyt_covid_data_url = 'https://raw.githubusercontent.com/nytimes/covid-19-data/master/us.csv'
@@ -7,6 +8,8 @@ def main():
     data = transform.transform_data(nyt_covid_data_url,jh_covid_data_url)
 
     print(data)
+
+    dynamo.batch_load_data(data)
 
 
 
