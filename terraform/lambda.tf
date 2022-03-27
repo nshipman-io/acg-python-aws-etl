@@ -22,6 +22,7 @@ resource "aws_iam_role_policy_attachment" "covid_etl_lambda_role_admin" {
 
 locals {
   lambda_src_path = "${path.module}/src"
+
 }
 resource "random_uuid" "lambda_src_hash" {
   keepers = {
@@ -37,20 +38,10 @@ data "archive_file" "covid_lambda_package" {
   type = "zip"
   source_dir = local.lambda_src_path
   output_path = "${random_uuid.lambda_src_hash.result}.zip"
-  depends_on = [null_resource.install_dependencies]
   excludes = [
     "__pycache__",
     "Pipfile"
   ]
-}
-
-resource "null_resource" "install_dependencies" {
-  provisioner "local-exec" {
-    command = "pip install -r ${local.lambda_src_path}/requirements.txt -t ${path.module}/ --upgrade"
-  }
-  triggers = {
-    dependencies_versions =  filemd5("${local.lambda_src_path}/requirements.txt")
-  }
 }
 
 resource "aws_lambda_function" "covid_etl_lambda_func" {
@@ -62,17 +53,22 @@ resource "aws_lambda_function" "covid_etl_lambda_func" {
   role = aws_iam_role.covid_etl_lambda_role.arn
   handler = "main.handler"
   runtime = "python3.9"
+
+  layers = ["arn:aws:lambda:us-east-1:336392948345:layer:AWSDataWrangler-Python39:1"]
+
+  memory_size = 512
+  timeout = 900
 }
 
-resource "aws_cloudwatch_event_rule" "every_five_minutes" {
-  name = "covid-etl-five-minutes"
+resource "aws_cloudwatch_event_rule" "daily_trigger" {
+  name = "daily-trigger"
   description = "Run covid etl lambda every five minutes"
-  schedule_expression = "rate(5 minutes)"
+  schedule_expression = "cron(0 10 * * ? *)"
 }
 
-resource "aws_cloudwatch_event_target" "covid_etl_every_day_" {
+resource "aws_cloudwatch_event_target" "covid_etl_every_day" {
   arn  = "${aws_lambda_function.covid_etl_lambda_func.arn}"
-  rule = aws_cloudwatch_event_rule.every_five_minutes.name
+  rule = aws_cloudwatch_event_rule.daily_trigger.name
   target_id = "covid_etl_lambda"
 }
 
@@ -81,7 +77,7 @@ resource "aws_lambda_permission" "allow_cloudwatch_to_call_covid_etl" {
     action = "lambda:InvokeFunction"
     function_name = "${aws_lambda_function.covid_etl_lambda_func.function_name}"
     principal = "events.amazonaws.com"
-    source_arn = "${aws_cloudwatch_event_rule.every_five_minutes.arn}"
+    source_arn = "${aws_cloudwatch_event_rule.daily_trigger.arn}"
 }
 
 resource "aws_sns_topic" "covid_table_updated" {

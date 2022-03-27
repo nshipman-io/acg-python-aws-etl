@@ -11,7 +11,7 @@ def publish_message(topic_arn, message, subject):
             Subject=subject,
         )['MessageId']
     except ClientError:
-        logging.log("Could not publish the message to the topic.")
+        logging.info("Could not publish the message to the topic.")
         raise
     else:
         return response
