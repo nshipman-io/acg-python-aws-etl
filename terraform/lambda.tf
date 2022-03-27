@@ -54,15 +54,22 @@ resource "aws_lambda_function" "covid_etl_lambda_func" {
   handler = "main.handler"
   runtime = "python3.9"
 
-  layers = ["arn:aws:lambda:us-east-1:336392948345:layer:AWSDataWrangler-Python39:1"]
+  layers = [for layer in var.covid-python-layers: layer]
 
   memory_size = 512
   timeout = 900
+
+  environment {
+    variables = {
+      DYNAMO_TABLE_NAME = var.dynamo-table-name
+      SNS_ARN = var.sns-topic-arn
+    }
+  }
 }
 
 resource "aws_cloudwatch_event_rule" "daily_trigger" {
   name = "daily-trigger"
-  description = "Run covid etl lambda every five minutes"
+  description = "Run covid etl lambda every day at 10AM UTC"
   schedule_expression = "cron(0 10 * * ? *)"
 }
 
