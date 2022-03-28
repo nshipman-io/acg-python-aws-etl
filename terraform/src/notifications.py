@@ -15,3 +15,4 @@ def publish_message(topic_arn, message, subject):
         raise
     else:
         return response
+

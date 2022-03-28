@@ -1,11 +1,13 @@
+import sys
 import traceback
 
 import awswrangler as wr
+import notifications
 import logging
 import boto3
 from decimal import Decimal
 
-def batch_load_data(df, table_name):
+def batch_load_data(df, table_name, sns_arn):
     logging.info("Loading dataframes into DynamoDB...")
     df['date'] = df['date'].dt.strftime('%Y-%m-%d')
     df['recovered'] = df['recovered'].apply(lambda x: Decimal(x))
@@ -22,8 +24,14 @@ def batch_load_data(df, table_name):
             logging.info(f"Updated: {updated_records} records to the Table.")
             return updated_records
         logging.info("COMPLETED: BATCH DATA FINISHED")
+
     except Exception as e:
         logging.error(traceback.format_exc())
+        message = f"Error updating DynamoDB Table: {traceback.format_exc()}"
+        subject = "US COVID-19 Records ETL Job Failed"
+        notifications.publish_message(sns_arn, message, subject)
+        exit(1)
+
 
 
 def get_number_of_updated_db_records(df, table_name):

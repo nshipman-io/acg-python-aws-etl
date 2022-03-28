@@ -15,11 +15,11 @@ def handler(event, context):
     jh_covid_data_url = 'https://raw.githubusercontent.com/datasets/covid-19/master/data/time-series-19-covid-combined.csv'
 
     logging.info("Transforming Covid-19 Data")
-    data = transform.transform_data(nyt_covid_data_url,jh_covid_data_url)
+    data = transform.transform_data(nyt_covid_data_url,jh_covid_data_url, sns_arn)
 
-    number_of_updated_records = dynamo.batch_load_data(data, table_name)
+    number_of_updated_records = dynamo.batch_load_data(data, table_name, sns_arn)
 
-    message = f"Updated DynamoDB Table: {table_name} with {number_of_updated_records}"
+    message = f"Updated DynamoDB Table: {table_name} with {number_of_updated_records} record(s)"
     subject = "US COVID-19 Records ETL"
 
     notifications.publish_message(sns_arn, message, subject)
