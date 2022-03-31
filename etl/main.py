@@ -23,6 +23,3 @@ def handler(event, context):
     subject = "US COVID-19 Records ETL"
 
     notifications.publish_message(sns_arn, message, subject)
-
-
-

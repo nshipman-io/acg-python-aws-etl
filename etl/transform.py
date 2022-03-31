@@ -2,7 +2,7 @@ import logging
 import traceback
 
 import pandas as pd
-import notifications
+from etl import notifications
 
 def clean_csv(csv):
   df = pd.read_csv(csv, parse_dates=['date'])

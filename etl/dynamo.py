@@ -1,11 +1,10 @@
-import sys
 import traceback
 
 import awswrangler as wr
-import notifications
 import logging
 import boto3
 from decimal import Decimal
+from etl import notifications
 
 def batch_load_data(df, table_name, sns_arn):
     logging.info("Loading dataframes into DynamoDB...")

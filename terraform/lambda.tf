@@ -21,7 +21,7 @@ resource "aws_iam_role_policy_attachment" "covid_etl_lambda_role_admin" {
 }
 
 locals {
-  lambda_src_path = "${path.module}/src"
+  lambda_src_path = "../etl"
 
 }
 resource "random_uuid" "lambda_src_hash" {
@@ -80,7 +80,7 @@ resource "aws_sns_topic" "covid_table_updated" {
 }
 
 resource "aws_sns_topic_subscription" "covid_etl_updated" {
-  endpoint  = "norman@nshipman.io"
+  endpoint  = "${var.sns-email-endpoint}"
   protocol  = "email"
   topic_arn = "${aws_sns_topic.covid_table_updated.arn}"
 }

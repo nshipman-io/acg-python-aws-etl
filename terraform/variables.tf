@@ -9,3 +9,7 @@ variable "dynamo-table-name" {
 variable "sns-topic-arn" {
   type = string
 }
+
+variable "sns-email-endpoint" {
+  type = string
+}
