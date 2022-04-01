@@ -2,9 +2,8 @@ import os
 
 import logging
 
-from transform import transform_data
-from dynamo import batch_load_data
-from notifications import publish_message
+from etl.modules import notifications, transform
+from etl.modules import dynamo
 
 def handler(event, context):
     table_name = os.environ['DYNAMO_TABLE_NAME']
@@ -16,11 +15,11 @@ def handler(event, context):
     jh_covid_data_url = 'https://raw.githubusercontent.com/datasets/covid-19/master/data/time-series-19-covid-combined.csv'
 
     logging.info("Transforming Covid-19 Data")
-    data = transform_data(nyt_covid_data_url,jh_covid_data_url, sns_arn)
+    data = transform.transform_data(nyt_covid_data_url, jh_covid_data_url, sns_arn)
 
-    number_of_updated_records = batch_load_data(data, table_name, sns_arn)
+    number_of_updated_records = dynamo.batch_load_data(data, table_name, sns_arn)
 
     message = f"Updated DynamoDB Table: {table_name} with {number_of_updated_records} record(s)"
     subject = "US COVID-19 Records ETL"
 
-    publish_message(sns_arn, message, subject)
+    notifications.publish_message(sns_arn, message, subject)

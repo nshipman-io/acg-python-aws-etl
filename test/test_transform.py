@@ -1,9 +1,8 @@
 import unittest
 
-import pandas as pd
 import pandas.api.types as ptypes
-from etl import transform
-from etl import notifications
+from etl.modules import transform
+
 
 class TestTransform(unittest.TestCase):
     def test_clean_csv(self):

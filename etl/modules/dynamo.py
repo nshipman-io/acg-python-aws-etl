@@ -3,9 +3,10 @@ import traceback
 import awswrangler as wr
 import logging
 import boto3
+
+from etl.modules import notifications
 from decimal import Decimal
 
-from notifications import publish_message
 
 def batch_load_data(df, table_name, sns_arn):
     logging.info("Loading dataframes into DynamoDB...")
@@ -29,7 +30,7 @@ def batch_load_data(df, table_name, sns_arn):
         logging.error(traceback.format_exc())
         message = f"Error updating DynamoDB Table: {traceback.format_exc()}"
         subject = "US COVID-19 Records ETL Job Failed"
-        publish_message(sns_arn, message, subject)
+        notifications.publish_message(sns_arn, message, subject)
         exit(1)
 
 

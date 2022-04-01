@@ -63,7 +63,7 @@ EOF
 }
 
 locals {
-  lambda_src_path = "../src"
+  lambda_src_path = "../etl"
   covid-python-layers = [
     "arn:aws:lambda:us-east-1:336392948345:layer:AWSDataWrangler-Python39:1"
   ]
@@ -96,7 +96,7 @@ resource "aws_lambda_function" "covid_etl_lambda_func" {
   source_code_hash = data.archive_file.covid_lambda_package.output_base64sha256
 
   role    = aws_iam_role.covid_etl_lambda_role.arn
-  handler = "etl.main.handler"
+  handler = "lambda.handler"
   runtime = "python3.9"
 
   layers = [for layer in local.covid-python-layers : layer]

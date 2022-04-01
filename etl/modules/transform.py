@@ -3,7 +3,8 @@ import traceback
 
 import pandas as pd
 
-from notifications import publish_message
+from etl.modules import notifications
+
 
 def clean_csv(csv):
   df = pd.read_csv(csv, parse_dates=['date'])
@@ -38,7 +39,7 @@ def transform_data(primary_data_src, secondary_data_src, sns_arn):
         logging.error(traceback.format_exc())
         message = f"Error extracting csv data: {traceback.format_exc()}"
         subject = "US COVID-19 Records ETL Job Failed"
-        publish_message(sns_arn, message, subject)
+        notifications.publish_message(sns_arn, message, subject)
         exit(1)
 
 
