@@ -65,7 +65,7 @@ EOF
 locals {
   lambda_src_path = "../etl"
   covid-python-layers = [
-  "arn:aws:lambda:us-east-1:336392948345:layer:AWSDataWrangler-Python39:1"
+    "arn:aws:lambda:us-east-1:336392948345:layer:AWSDataWrangler-Python39:1"
   ]
 
 }
