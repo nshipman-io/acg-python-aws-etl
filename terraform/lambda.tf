@@ -36,6 +36,30 @@ resource "aws_iam_role_policy" "covid_etl_lambda_role_log_policy" {
 EOF
 }
 
+resource "aws_iam_role_policy" "covid_etl_lambda_role_dynamodb_policy" {
+  name = "CovidETLAllowDynamoDBPermissions"
+  role   = aws_iam_role.covid_etl_lambda_role.id
+  policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement":[{
+    "Effect": "Allow",
+    "Action": [
+     "dynamodb:BatchGetItem",
+     "dynamodb:GetItem",
+     "dynamodb:Query",
+     "dynamodb:Scan",
+     "dynamodb:BatchWriteItem",
+     "dynamodb:PutItem",
+     "dynamodb:UpdateItem"
+    ],
+    "Resource": "${aws_dynamodb_table.covid-db.arn}"
+   }
+  ]
+}
+EOF
+}
+
 resource "aws_iam_role_policy" "covid_etl_lambda_role_sns_policy" {
   name   = "CovidETLAllowSNSPermissions"
   role   = aws_iam_role.covid_etl_lambda_role.id
