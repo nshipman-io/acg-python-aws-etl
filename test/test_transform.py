@@ -1,7 +1,7 @@
 import unittest
 
 import pandas.api.types as ptypes
-from etl.modules import transform
+from etl import transform
 
 
 class TestTransform(unittest.TestCase):
