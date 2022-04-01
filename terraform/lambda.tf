@@ -64,6 +64,9 @@ EOF
 
 locals {
   lambda_src_path = "../etl"
+  covid-python-layers = [
+    "arn:aws:lambda:us-east-1:336392948345:layer:AWSDataWrangler-Python39:1"
+  ]
 
 }
 resource "random_uuid" "lambda_src_hash" {
@@ -96,7 +99,7 @@ resource "aws_lambda_function" "covid_etl_lambda_func" {
   handler = "main.handler"
   runtime = "python3.9"
 
-  layers = [for layer in var.covid-python-layers : layer]
+  layers = [for layer in local.covid-python-layers : layer]
 
   memory_size = 512
   timeout     = 900
