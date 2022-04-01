@@ -2,8 +2,9 @@ import os
 
 import logging
 
-from modules import notifications, transform
-from modules import dynamo
+import notifications
+import transform
+import dynamo
 
 def handler(event, context):
     table_name = os.environ['DYNAMO_TABLE_NAME']
