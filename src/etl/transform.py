@@ -2,7 +2,8 @@ import logging
 import traceback
 
 import pandas as pd
-from .notifications import publish_message
+
+from notifications import publish_message
 
 def clean_csv(csv):
   df = pd.read_csv(csv, parse_dates=['date'])

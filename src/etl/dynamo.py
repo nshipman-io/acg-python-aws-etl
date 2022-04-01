@@ -4,7 +4,8 @@ import awswrangler as wr
 import logging
 import boto3
 from decimal import Decimal
-from .notifications import publish_message
+
+from notifications import publish_message
 
 def batch_load_data(df, table_name, sns_arn):
     logging.info("Loading dataframes into DynamoDB...")
