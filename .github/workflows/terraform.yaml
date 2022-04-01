@@ -36,7 +36,7 @@ jobs:
       - name: Terraform Plan
         id: plan
         if: github.event_name == 'pull_request'
-        run: terraform plan -no-color -var="aws_access_key=${{ secrets.AWS_ACCESS_KEY }}" -var="aws_secret_access_key=${{ secrets.AWS_SECRET_ACCESS_KEY }}" -var="dynamo-table-name=${{ secrets.TF_VAR_DYNAMO_TABLE_NAME }}" -var="sns-topic-arn=${{ secrets.TF_VAR_SNS_TOPIC_ARN }}" -var="sns-email-endpoint=${{ secrets.TF_VAR_SNS_EMAIL_ENDPOINT }}"
+        run: terraform plan -no-color -var="aws_access_key=${{ secrets.AWS_ACCESS_KEY_ID }}" -var="aws_secret_access_key=${{ secrets.AWS_SECRET_ACCESS_KEY }}" -var="dynamo-table-name=${{ secrets.TF_VAR_DYNAMO_TABLE_NAME }}" -var="sns-topic-arn=${{ secrets.TF_VAR_SNS_TOPIC_ARN }}" -var="sns-email-endpoint=${{ secrets.TF_VAR_SNS_EMAIL_ENDPOINT }}"
         continue-on-error: true
 
       - name: Update Pull Request
@@ -66,4 +66,4 @@ jobs:
 
       - name: Terraform Apply
         if: github.ref == 'refs/heads/master' && github.event_name == 'push'
-        run: terraform apply -auto-approve -var="aws_access_key=${{ secrets.AWS_ACCESS_KEY }}" -var="aws_secret_access_key=${{ secrets.AWS_SECRET_ACCESS_KEY }}" -var="dynamo-table-name=${{ secrets.TF_VAR_DYNAMO_TABLE_NAME }}" -var="sns-topic-arn=${{ secrets.TF_VAR_SNS_TOPIC_ARN }}" -var="sns-email-endpoint=${{ secrets.TF_VAR_SNS_EMAIL_ENDPOINT }}"
+        run: terraform apply -auto-approve -var="aws_access_key=${{ secrets.AWS_ACCESS_KEY_ID }}" -var="aws_secret_access_key=${{ secrets.AWS_SECRET_ACCESS_KEY }}" -var="dynamo-table-name=${{ secrets.TF_VAR_DYNAMO_TABLE_NAME }}" -var="sns-topic-arn=${{ secrets.TF_VAR_SNS_TOPIC_ARN }}" -var="sns-email-endpoint=${{ secrets.TF_VAR_SNS_EMAIL_ENDPOINT }}"
