@@ -51,7 +51,8 @@ resource "aws_iam_role_policy" "covid_etl_lambda_role_dynamodb_policy" {
      "dynamodb:Scan",
      "dynamodb:BatchWriteItem",
      "dynamodb:PutItem",
-     "dynamodb:UpdateItem"
+     "dynamodb:UpdateItem",
+     "dynamodb:DescribeTable"
     ],
     "Resource": "${aws_dynamodb_table.covid-db.arn}"
    }
