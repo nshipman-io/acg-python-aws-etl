@@ -37,7 +37,7 @@ EOF
 }
 
 resource "aws_iam_role_policy" "covid_etl_lambda_role_dynamodb_policy" {
-  name = "CovidETLAllowDynamoDBPermissions"
+  name   = "CovidETLAllowDynamoDBPermissions"
   role   = aws_iam_role.covid_etl_lambda_role.id
   policy = <<EOF
 {
