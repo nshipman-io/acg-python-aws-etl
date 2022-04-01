@@ -3,8 +3,8 @@ import traceback
 import awswrangler as wr
 import logging
 import boto3
+import notifications
 
-from etl.modules import notifications
 from decimal import Decimal
 
 
