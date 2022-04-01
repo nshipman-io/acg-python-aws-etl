@@ -63,7 +63,7 @@ EOF
 }
 
 locals {
-  lambda_src_path = "../etl"
+  lambda_src_path = "../"
   covid-python-layers = [
     "arn:aws:lambda:us-east-1:336392948345:layer:AWSDataWrangler-Python39:1"
   ]
@@ -85,7 +85,9 @@ data "archive_file" "covid_lambda_package" {
   output_path = "${random_uuid.lambda_src_hash.result}.zip"
   excludes = [
     "__pycache__",
-    "Pipfile"
+    "Pipfile",
+    "terraform/*",
+    "test/*"
   ]
 }
 
