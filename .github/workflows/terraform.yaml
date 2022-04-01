@@ -73,5 +73,5 @@ jobs:
         run: exit 1
 
       - name: Terraform Apply
-        if: github.ref == 'refs/heads/master' && github.event_name == 'push'
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         run: terraform apply -auto-approve -var="dynamo-table-name=${{ secrets.TF_VAR_DYNAMO_TABLE_NAME }}" -var="sns-topic-arn=${{ secrets.TF_VAR_SNS_TOPIC_ARN }}" -var="sns-email-endpoint=${{ secrets.TF_VAR_SNS_EMAIL_ENDPOINT }}"
